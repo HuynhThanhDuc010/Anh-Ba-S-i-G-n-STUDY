@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Anh Ba Saigon Studies</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/png" href="assets/dragon_logo.png" />
+    <link rel="apple-touch-icon" href="assets/dragon_logo.png" />
+    <meta name="theme-color" content="#090d18" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="side">
+        <div class="brand">
+          <div class="logo dragon-logo">
+            <img src="assets/dragon_logo.png" alt="Black dragon logo" />
+          </div>
+          <div><b>Anh Ba Saigon Studies</b><small></small></div>
+        </div>
+        <div class="nav-group-label">Học tập</div>
+        <button class="nav active" data-screen="home">
+          <span class="nav-ico">⌂</span><span>Trang chủ</span>
+        </button>
+
+        <button
+          class="nav-action nav-parent"
+          id="dailyParent"
+          onclick="toggleSideGroup('dailySub', 'dailyParent')"
+        >
+          <span class="nav-ico">▣</span><span>Học hằng ngày</span
+          ><span class="nav-arrow">›</span>
+        </button>
+        <div class="nav-submenu" id="dailySub">
+          <button class="nav-action" onclick="startDailyNew()">
+            <span class="nav-ico">🌱</span><span>Từ mới</span>
+          </button>
+          <button class="nav" data-screen="review">
+            <span class="nav-ico">↻</span><span>Ôn tập SRS</span>
+          </button>
+          <button class="nav-action" onclick="startHardReview()">
+            <span class="nav-ico">🔥</span><span>Từ sai & khó</span>
+          </button>
+        </div>
+
+        <button
+          class="nav-action nav-parent"
+          id="practiceParent"
+          onclick="
+            toggleSideGroup('practiceSub', 'practiceParent');
+            openPracticeChooser();
+          "
+        >
+          <span class="nav-ico">✎</span><span>Luyện tập</span
+          ><span class="nav-arrow">›</span>
+        </button>
+        <div class="nav-submenu" id="practiceSub">
+          <button class="nav-action" onclick="startChosenPractice('write')">
+            <span class="nav-ico">✎</span><span>Luyện viết</span>
+          </button>
+          <button class="nav-action" onclick="startChosenPractice('listening')">
+            <span class="nav-ico">◉</span><span>Luyện nghe</span>
+          </button>
+          <button class="nav-action" onclick="startChosenPractice('flash')">
+            <span class="nav-ico">▢</span><span>Flashcard</span>
+          </button>
+          <button class="nav-action" onclick="startChosenPractice('test')">
+            <span class="nav-ico">☑</span><span>Kiểm tra</span>
+          </button>
+        </div>
+
+        <div class="nav-group-label">Thư viện</div>
+        <button
+          class="nav-action nav-parent"
+          id="libraryParent"
+          onclick="
+            showScreen('library');
+            toggleSideGroup('librarySub', 'libraryParent');
+          "
+        >
+          <span class="nav-ico">▣</span><span>Kho từ vựng</span
+          ><span class="nav-arrow">›</span>
+        </button>
+        <div class="nav-submenu" id="librarySub">
+          <button class="nav-action" onclick="showScreen('library')">
+            <span class="nav-ico">▤</span><span>Tất cả bộ từ</span>
+          </button>
+          <button
+            class="nav-action"
+            onclick="
+              showScreen('library');
+              setTimeout(
+                () =>
+                  document
+                    .getElementById('folderBar')
+                    ?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+                80,
+              );
+            "
+          >
+            <span class="nav-ico">⌑</span><span>Thư mục</span>
+          </button>
+        </div>
+
+        <button class="nav" data-screen="stats">
+          <span class="nav-ico">▥</span><span>Thống kê</span>
+        </button>
+        <button
+          id="themeToggle"
+          class="theme-toggle"
+          type="button"
+          onclick="toggleTheme()"
+        >
+          🌙 <span>Giao diện tối</span>
+        </button>
+      </aside>
+      <main class="main">
+        <section id="home" class="screen active">
+          <div class="welcome-row">
+            <div>
+              <h1 id="helloTitle">Học Cùng Anh Ba Sài Gòn Nhen</h1>
+              <p>Cố gắng hôm nay, tiến bộ mỗi ngày.</p>
+              <div class="badge-row">
+                <span class="soft-badge"
+                  >🔥 <b id="streakBadge">0 ngày</b> liên tiếp</span
+                >
+                <span class="soft-badge">🎯 Daily Study System</span>
+                <span class="soft-badge">🐉 Anh Ba Saigon Studies</span>
+              </div>
+            </div>
+            <button class="btn pri" onclick="showScreen('create')">
+              + Tạo bộ từ
+            </button>
+          </div>
+
+          <div class="home-shell">
+            <div class="home-left">
+              <div class="card goal-panel">
+                <div class="goal-head">
+                  <h3>Mục tiêu hôm nay</h3>
+                  <button class="btn ghost" onclick="toggleGoalEditor()">
+                    Sửa mục tiêu
+                  </button>
+                </div>
+                <div id="goalMetrics" class="goal-metrics"></div>
+                <div
+                  id="goalEditor"
+                  style="
+                    display: none;
+                    margin-top: 18px;
+                    border-top: 1px solid #263244;
+                    padding-top: 14px;
+                  "
+                >
+                  <div class="toolbar">
+                    <label>Từ mới</label
+                    ><input
+                      id="goalNew"
+                      type="number"
+                      min="1"
+                      max="200"
+                    /><label>Ôn SRS</label
+                    ><input
+                      id="goalReview"
+                      type="number"
+                      min="1"
+                      max="500"
+                    /><label>Kiểm tra</label
+                    ><input
+                      id="goalTest"
+                      type="number"
+                      min="0"
+                      max="20"
+                    /><button
+                      class="btn sec"
+                      onclick="
+                        saveDailyGoals();
+                        toggleGoalEditor();
+                      "
+                    >
+                      Lưu
+                    </button>
+                  </div>
+                </div>
+                <span id="todayLabel" style="display: none"></span>
+              </div>
+
+              <div id="periodicReviewBanner"></div>
+
+              <div id="focusCards" class="focus-grid"></div>
+
+              <div class="card">
+                <div class="section" style="margin-top: 0">
+                  <h3>Tiếp tục học</h3>
+                  <span id="setCount"></span>
+                </div>
+                <div id="recentMini" class="recent-strip"></div>
+                <div id="homeSets" class="list" style="display: none"></div>
+              </div>
+
+              <div class="card">
+                <div class="section" style="margin-top: 0">
+                  <h3>Học nhanh</h3>
+                  <span>Chọn chế độ</span>
+                </div>
+                <div class="quick-row">
+                  <button class="quick-btn" onclick="startSmartDailyQueue()">
+                    ⚡ Quick Study<span>Smart Daily Queue</span>
+                  </button>
+                  <button class="quick-btn" onclick="showScreen('library')">
+                    ✎ Luyện viết<span>Việt ↔ Anh</span>
+                  </button>
+                  <button class="quick-btn" onclick="showScreen('listening')">
+                    🎧 Luyện nghe<span>Nghe & phản xạ</span>
+                  </button>
+                  <button class="quick-btn" onclick="showScreen('library')">
+                    ▢ Flashcard<span>Ôn bằng thẻ</span>
+                  </button>
+                  <button class="quick-btn" onclick="showScreen('library')">
+                    ☑ Kiểm tra<span>10–50 câu</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="home-right">
+              <div class="card streak-panel">
+                <div class="streak-fire">🔥</div>
+                <div>
+                  <div class="small">Chuỗi ngày học</div>
+                  <div class="streak-num" id="streakNum">0</div>
+                  <div class="small">ngày liên tiếp</div>
+                </div>
+                <div id="weekDots" class="streak-days"></div>
+              </div>
+
+              <div class="card chart-card">
+                <div class="section" style="margin-top: 0">
+                  <h3>Tổng quan 7 ngày</h3>
+                  <span id="sum7"></span>
+                </div>
+                <div id="chart7" class="spark"></div>
+                <div id="chart7Summary" class="chart-summary"></div>
+              </div>
+
+              <div class="card heat-card">
+                <div class="section" style="margin-top: 0">
+                  <h3>Lịch học 90 ngày</h3>
+                  <span id="heatmapInfo"></span>
+                </div>
+                <div id="studyHeatmap" class="heatmap"></div>
+                <div class="chart-summary">
+                  <span>Ít ▫️ → 🟩 Nhiều</span><span>Mỗi ô = 1 ngày</span>
+                </div>
+              </div>
+
+              <div id="statsInline" class="card stats-inline"></div>
+            </div>
+          </div>
+
+          <div id="dailyOverview"></div>
+          <div id="dailyPlan"></div>
+          <div id="homeStats"></div>
+          <div id="dueHero"></div>
+          <div id="chart30"></div>
+          <div id="chart30Summary"></div>
+          <span id="sum30"></span>
+        </section>
+        <section id="create" class="screen">
+          <div class="top">
+            <div>
+              <h1>Tạo bộ từ</h1>
+              <p>
+                Dán English - IPA - Nghĩa. Có thể có số thứ tự như 57. iterate;
+                app sẽ tự bỏ số trước khi tạo bộ từ.
+              </p>
+            </div>
+          </div>
+          <div class="grid g2">
+            <div class="card">
+              <label>Tên bộ từ</label
+              ><input
+                id="setName"
+                placeholder="Ví dụ: English IT - Chapter 1"
+              />
+              <div style="height: 12px"></div>
+              <label>Danh sách từ</label
+              ><textarea
+                id="rawVocabulary"
+                placeholder="57. implement - /ˈɪmplɪment/ - cài đặt, hiện thực"
+              ></textarea>
+              <div class="help">
+                Smart Import tự nhận 1 dòng, 2 dòng hoặc 3 dòng; hỗ trợ <b>-</b>, <b>:</b>, <b>|</b>, tab hoặc <b>;</b>. Nếu dòng bắt đầu
+                bằng <b>1.</b>, <b>57.</b>, <b>120.</b>... app tự loại số đó và
+                dùng cột <b>#</b> làm STT mới. App tự thêm loại từ, trạng thái
+                học và lịch ôn SRS cho từng từ.
+              </div>
+              <div id="parseMsg"></div>
+              <div
+                class="actions"
+                style="justify-content: flex-start; margin-top: 13px"
+              >
+                <button class="btn sec" onclick="previewVocabulary()">
+                  Xem trước</button
+                ><button class="btn pri" onclick="saveSet()">Lưu bộ từ</button
+                ><button class="btn ghost" onclick="fillDemo()">
+                  Dữ liệu mẫu
+                </button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="section" style="margin-top: 0">
+                <h3>Xem trước</h3>
+                <span id="previewCount">0 từ</span>
+              </div>
+              <div id="previewArea" class="empty">
+                <div class="emo">🧠</div>
+                Dán danh sách rồi bấm Xem trước.
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="library" class="screen">
+          <div class="top">
+            <div>
+              <h1>Kho bộ đề 🗄️</h1>
+              <p>Quản lý, chỉnh sửa, sao lưu và học lại tất cả bộ từ.</p>
+            </div>
+            <button class="btn pri" onclick="showScreen('create')">
+              + Tạo bộ mới
+            </button>
+          </div>
+          <div class="card">
+            <div class="toolbar">
+              <input
+                id="librarySearch"
+                class="search"
+                placeholder="🔎 Tìm bộ đề hoặc từ vựng..."
+                oninput="renderLibrary()"
+              /><button class="btn sec" onclick="copyAllLibrary()">
+                📋 Copy kho</button
+              ><button class="btn sec" onclick="openPaste()">📥 Dán kho</button
+              ><button class="btn sec" onclick="createFolder()">
+                📁 Tạo thư mục</button
+              ><button class="btn ghost" onclick="openFolderTrash()">
+                ♻️ Khôi phục thư mục</button
+              ><button class="btn pri" onclick="exportFullBackup()">
+                🛡️ Full Backup</button
+              ><button
+                class="btn ghost"
+                onclick="document.getElementById('fullBackupFile').click()"
+              >
+                ♻️ Full Restore</button
+              ><input
+                id="fullBackupFile"
+                type="file"
+                accept=".json,application/json"
+                hidden
+                onchange="importFullBackup(event)"
+              />
+            </div>
+            <div id="folderBar" class="folderbar"></div>
+            <div id="folderTrashBox" class="card folder-trash-box" style="display:none"></div>
+            <div id="bulkSetBar" class="bulk-set-bar">
+              <div>
+                <b>Chọn nhiều bộ đề</b>
+                <span id="bulkSetCount" class="small">0 bộ đã chọn</span>
+              </div>
+              <div class="actions">
+                <button class="btn ghost" onclick="selectAllVisibleSets()">☑ Chọn tất cả đang hiện</button>
+                <button class="btn ghost" onclick="clearSelectedSets()">Bỏ chọn</button>
+                <button class="btn sec" onclick="moveSelectedSetsToFolder()">📁 Chuyển vào folder</button>
+              </div>
+            </div>
+
+          </div>
+          <div
+            id="practiceChooser"
+            class="card"
+            style="display: none; margin-bottom: 16px"
+          >
+            <div class="section" style="margin-top: 0">
+              <h3>✎ Chọn bộ đề luyện tập</h3>
+              <span>Chọn bộ từ trước, sau đó chọn hình thức luyện.</span>
+            </div>
+            <div class="toolbar">
+              <label>Bộ đề</label>
+              <select id="practiceSetSelect" style="min-width: 260px"></select>
+              <button class="btn sec" onclick="startChosenPractice('write')">
+                ✎ Luyện viết
+              </button>
+              <button
+                class="btn ghost"
+                onclick="startChosenPractice('listening')"
+              >
+                🎧 Luyện nghe
+              </button>
+              <button class="btn ghost" onclick="startChosenPractice('flash')">
+                ▢ Flashcard
+              </button>
+              <button class="btn pri" onclick="startChosenPractice('test')">
+                ☑ Kiểm tra
+              </button>
+            </div>
+          </div>
+          <div class="section">
+            <h3>Tất cả bộ đề</h3>
+            <span id="libraryCount"></span>
+          </div>
+          <div id="libraryList" class="list"></div>
+        </section>
+        <section id="listening" class="screen">
+          <div class="top">
+            <div>
+              <h1>Luyện nghe 🎧</h1>
+              <p>
+                Chỉ phát âm khi bạn bấm Nghe/Nghe chậm. Hỗ trợ Nghe → Viết, Nghe
+                → Chọn nghĩa, giọng Anh/Mỹ và nhiều tốc độ.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="toolbar">
+              <label>Bộ từ:</label
+              ><select id="listenSet" onchange="startListening()"></select
+              ><label>Dạng:</label
+              ><select id="listenMode" onchange="startListening()">
+                <option value="write">Nghe → Viết từ</option>
+                <option value="meaning">Nghe → Chọn nghĩa</option></select
+              ><label>Giọng:</label
+              ><select id="listenVoice">
+                <option value="en-US">🇺🇸 Mỹ</option>
+                <option value="en-GB">🇬🇧 Anh</option></select
+              ><label>Tốc độ:</label
+              ><select id="listenRate">
+                <option value=".65">Chậm</option>
+                <option value=".85" selected>Bình thường</option>
+                <option value="1">Nhanh</option>
+              </select>
+            </div>
+          </div>
+          <div
+            id="listenArea"
+            class="card listen-box"
+            style="margin-top: 16px"
+          ></div>
+        </section>
+        <section id="review" class="screen">
+          <div class="top">
+            <div>
+              <h1>Ôn tập 🧠</h1>
+              <p>
+                Ôn theo SRS hoặc chọn riêng một bộ đề để luyện những từ Sai /
+                Khó.
+              </p>
+            </div>
+          </div>
+
+          <div class="weak-review">
+            <div class="card weak-controls">
+              <div class="section" style="margin-top: 0">
+                <h3>🔥 Ôn từ Sai / Khó theo bộ</h3>
+                <span>Tùy chọn bộ đề</span>
+              </div>
+              <div>
+                <label>Chọn bộ đề</label
+                ><select
+                  id="weakSetSelect"
+                  onchange="renderWeakReviewPreview()"
+                ></select>
+              </div>
+              <div>
+                <label>Nhóm từ muốn ôn</label>
+                <select
+                  id="weakModeSelect"
+                  onchange="renderWeakReviewPreview()"
+                >
+                  <option value="wrong">❌ Từ đã từng trả lời sai</option>
+                  <option value="hard">🔥 Từ đang ở trạng thái Khó</option>
+                  <option value="both" selected>⚡ Cả từ Sai + Khó</option>
+                </select>
+              </div>
+              <div>
+                <label>Số từ mỗi lượt</label>
+                <select
+                  id="weakCountSelect"
+                  onchange="renderWeakReviewPreview()"
+                >
+                  <option value="5" selected>5 từ</option>
+                  <option value="10">10 từ</option>
+                  <option value="20">20 từ</option>
+                  <option value="9999">Tất cả</option>
+                </select>
+              </div>
+              <button class="btn pri" onclick="startSelectedWeakReview()">
+                Bắt đầu ôn →
+              </button>
+            </div>
+            <div class="card">
+              <div class="section" style="margin-top: 0">
+                <h3 id="weakPreviewTitle">Thống kê bộ đề</h3>
+                <span id="weakPreviewCount"></span>
+              </div>
+              <div id="weakPreviewStats" class="grid g3"></div>
+              <div id="weakPreviewWords" class="weak-words"></div>
+            </div>
+          </div>
+
+          <div id="reviewSummary" class="grid g3"></div>
+          <div class="section">
+            <h3>Các bộ có từ cần ôn theo SRS</h3>
+            <span>Đến hạn theo lịch Spaced Repetition</span>
+          </div>
+          <div id="reviewSets" class="list"></div>
+        </section>
+        <section id="learn" class="screen">
+          <div class="top">
+            <div>
+              <h1 id="learnTitle">Luyện viết</h1>
+              <p id="learnSub">
+                Mỗi lượt tối đa 5 từ; sau khi chấm đáp án, nhấn Space để qua từ
+                tiếp theo.
+              </p>
+            </div>
+            <div class="actions">
+              <button class="btn ghost" onclick="resetWritingProgress()">
+                ↺ Reset tiến độ</button
+              ><button class="btn ghost" onclick="exitLearn()">← Thoát</button>
+            </div>
+          </div>
+          <div class="learnwrap">
+            <div class="card" style="padding: 12px 14px; margin-bottom: 14px">
+              <div class="toolbar">
+                <b>Chế độ:</b
+                ><button
+                  id="modeViEn"
+                  class="btn sec"
+                  onclick="setLearnMode('vi-en')"
+                >
+                  🇻🇳 Việt → Anh</button
+                ><button
+                  id="modeEnVi"
+                  class="btn ghost"
+                  onclick="setLearnMode('en-vi')"
+                >
+                  🇬🇧 Anh → Việt
+                </button>
+              </div>
+            </div>
+            <div class="subtle" id="learnProgressText"></div>
+            <div class="progress" style="margin: 8px 0 16px">
+              <div id="learnBar"></div>
+            </div>
+            <div id="learnBox" class="card qcard"></div>
+          </div>
+        </section>
+        <section id="flash" class="screen">
+          <div class="top">
+            <div>
+              <h1 id="flashTitle">Flashcard</h1>
+              <p>Nhấn vào thẻ để lật; sau đó tự đánh giá mức độ nhớ.</p>
+            </div>
+            <button class="btn ghost" onclick="exitFlash()">← Thoát</button>
+          </div>
+          <div class="flashwrap">
+            <div class="subtle" id="flashProgress"></div>
+            <div class="progress" style="margin: 8px 0 16px">
+              <div id="flashBar"></div>
+            </div>
+            <div id="flashCard" class="card flash" onclick="flipFlash()"></div>
+            <div id="flashRate" class="rate"></div>
+          </div>
+        </section>
+        <section id="test" class="screen">
+          <div class="top">
+            <div>
+              <h1 id="testTitle">Bài kiểm tra</h1>
+              <p id="testSub">Trộn nhiều dạng câu hỏi.</p>
+            </div>
+            <button class="btn ghost" onclick="exitTest()">← Thoát</button>
+          </div>
+          <div class="testwrap">
+            <div class="config card" id="testConfig"></div>
+            <div id="testProgressWrap" style="display: none">
+              <div class="subtle" id="testProgressText"></div>
+              <div class="progress" style="margin: 8px 0 16px">
+                <div id="testBar"></div>
+              </div>
+            </div>
+            <div id="testBox" class="card"></div>
+          </div>
+        </section>
+        <section id="manage" class="screen">
+          <div class="top">
+            <div>
+              <h1 id="manageTitle">Chỉnh sửa bộ từ</h1>
+              <p>
+                Thêm, sửa, xóa từ; đánh dấu yêu thích và điều chỉnh loại từ.
+              </p>
+            </div>
+            <button class="btn ghost" onclick="showScreen('library')">
+              ← Kho bộ đề
+            </button>
+          </div>
+          <div class="card">
+            <div class="grid g2">
+              <div><label>Tên bộ đề</label><input id="manageSetName" /></div>
+              <div style="display: flex; align-items: end">
+                <button class="btn pri" onclick="saveManagedSet()">
+                  Lưu thay đổi
+                </button>
+              </div>
+            </div>
+            <div class="section">
+              <h3>Từ vựng</h3>
+              <div class="actions">
+                <button class="btn sec" onclick="addManagedWord()">+ Thêm 1 từ</button>
+                <button class="btn pri" onclick="toggleBulkAddWords()">＋ Thêm nhiều từ</button>
+              </div>
+            </div>
+            <div id="bulkAddWordsBox" class="bulk-add-box" style="display:none">
+              <div class="section" style="margin-top:0">
+                <h3>Thêm nhiều từ cùng lúc</h3>
+                <span>Smart Import giống lúc tạo bộ đề mới</span>
+              </div>
+              <textarea id="bulkAddWordsText" placeholder="Ví dụ:
+1. implement - /ˈɪmplɪment/ - cài đặt, hiện thực
+2. declare - /dɪˈkleə(r)/ - khai báo
+3. define - /dɪˈfaɪn/ - định nghĩa"></textarea>
+              <div class="help">
+                App tự lọc số thứ tự, tự tách English / IPA / nghĩa và tự thêm loại từ.
+                Từ trùng trong chính bộ đề sẽ được bỏ qua.
+              </div>
+              <div id="bulkAddWordsMsg"></div>
+              <div class="actions" style="justify-content:flex-start;margin-top:12px">
+                <button class="btn ghost" onclick="previewBulkAddWords()">Xem trước</button>
+                <button class="btn pri" onclick="confirmBulkAddWords()">Thêm vào bộ đề</button>
+                <button class="btn ghost" onclick="toggleBulkAddWords(false)">Đóng</button>
+              </div>
+            </div>
+            <div id="manageWords" class="wordgrid"></div>
+          </div>
+        </section>
+        <section id="history" class="screen">
+          <div class="top">
+            <div>
+              <h1 id="historyTitle">Lịch sử kiểm tra</h1>
+              <p>Xem điểm và xu hướng tiến bộ của từng bộ đề.</p>
+            </div>
+            <button class="btn ghost" onclick="showScreen('library')">
+              ← Kho bộ đề
+            </button>
+          </div>
+          <div id="historyList" class="history"></div>
+        </section>
+        <section id="stats" class="screen">
+          <div class="top">
+            <div>
+              <h1>Thống kê 📊</h1>
+              <p>
+                Theo dõi độ chính xác, trạng thái từ và những từ cần tập trung.
+              </p>
+            </div>
+          </div>
+          <div id="statsCards" class="grid g4"></div>
+          <div class="section">
+            <h3>Từ hay sai</h3>
+            <span>Top 25</span>
+          </div>
+          <div id="hardWords" class="card"></div>
+        </section>
+      </main>
+    </div>
+    <dialog id="pasteDialog" class="modal">
+      <div class="modalin">
+        <h3>📥 Dán kho Anh Ba Saigon Studies</h3>
+        <p class="subtle">
+          Dán dữ liệu đã Copy kho từ bản cũ. App sẽ tự chuyển đổi cấu trúc dữ
+          liệu.
+        </p>
+        <textarea id="pasteText"></textarea>
+        <div class="actions" style="margin-top: 12px">
+          <button class="btn ghost" onclick="pasteDialog.close()">Hủy</button
+          ><button class="btn sec" onclick="pasteClipboard()">
+            Dán từ clipboard</button
+          ><button class="btn pri" onclick="importFromText()">
+            Nhập vào kho
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
