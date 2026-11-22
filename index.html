@@ -14,7 +14,7 @@
       <aside class="side">
         <div class="brand">
           <div class="logo dragon-logo">
-            <img src="assets/dragon_logo.png" alt="Black dragon logo" />
+            <img src="./assets/dragon_logo.png" alt="Black dragon logo" />
           </div>
           <div><b>Anh Ba Saigon Studies</b><small></small></div>
         </div>
@@ -290,10 +290,11 @@
                 placeholder="57. implement - /ˈɪmplɪment/ - cài đặt, hiện thực"
               ></textarea>
               <div class="help">
-                Smart Import tự nhận 1 dòng, 2 dòng hoặc 3 dòng; hỗ trợ <b>-</b>, <b>:</b>, <b>|</b>, tab hoặc <b>;</b>. Nếu dòng bắt đầu
-                bằng <b>1.</b>, <b>57.</b>, <b>120.</b>... app tự loại số đó và
-                dùng cột <b>#</b> làm STT mới. App tự thêm loại từ, trạng thái
-                học và lịch ôn SRS cho từng từ.
+                Smart Import tự nhận 1 dòng, 2 dòng hoặc 3 dòng; hỗ trợ
+                <b>-</b>, <b>:</b>, <b>|</b>, tab hoặc <b>;</b>. Nếu dòng bắt
+                đầu bằng <b>1.</b>, <b>57.</b>, <b>120.</b>... app tự loại số đó
+                và dùng cột <b>#</b> làm STT mới. App tự thêm loại từ, trạng
+                thái học và lịch ôn SRS cho từng từ.
               </div>
               <div id="parseMsg"></div>
               <div
@@ -360,19 +361,28 @@
               />
             </div>
             <div id="folderBar" class="folderbar"></div>
-            <div id="folderTrashBox" class="card folder-trash-box" style="display:none"></div>
+            <div
+              id="folderTrashBox"
+              class="card folder-trash-box"
+              style="display: none"
+            ></div>
             <div id="bulkSetBar" class="bulk-set-bar">
               <div>
                 <b>Chọn nhiều bộ đề</b>
                 <span id="bulkSetCount" class="small">0 bộ đã chọn</span>
               </div>
               <div class="actions">
-                <button class="btn ghost" onclick="selectAllVisibleSets()">☑ Chọn tất cả đang hiện</button>
-                <button class="btn ghost" onclick="clearSelectedSets()">Bỏ chọn</button>
-                <button class="btn sec" onclick="moveSelectedSetsToFolder()">📁 Chuyển vào folder</button>
+                <button class="btn ghost" onclick="selectAllVisibleSets()">
+                  ☑ Chọn tất cả đang hiện
+                </button>
+                <button class="btn ghost" onclick="clearSelectedSets()">
+                  Bỏ chọn
+                </button>
+                <button class="btn sec" onclick="moveSelectedSetsToFolder()">
+                  📁 Chuyển vào folder
+                </button>
               </div>
             </div>
-
           </div>
           <div
             id="practiceChooser"
@@ -614,28 +624,48 @@
             <div class="section">
               <h3>Từ vựng</h3>
               <div class="actions">
-                <button class="btn sec" onclick="addManagedWord()">+ Thêm 1 từ</button>
-                <button class="btn pri" onclick="toggleBulkAddWords()">＋ Thêm nhiều từ</button>
+                <button class="btn sec" onclick="addManagedWord()">
+                  + Thêm 1 từ
+                </button>
+                <button class="btn pri" onclick="toggleBulkAddWords()">
+                  ＋ Thêm nhiều từ
+                </button>
               </div>
             </div>
-            <div id="bulkAddWordsBox" class="bulk-add-box" style="display:none">
-              <div class="section" style="margin-top:0">
+            <div
+              id="bulkAddWordsBox"
+              class="bulk-add-box"
+              style="display: none"
+            >
+              <div class="section" style="margin-top: 0">
                 <h3>Thêm nhiều từ cùng lúc</h3>
                 <span>Smart Import giống lúc tạo bộ đề mới</span>
               </div>
-              <textarea id="bulkAddWordsText" placeholder="Ví dụ:
+              <textarea
+                id="bulkAddWordsText"
+                placeholder="Ví dụ:
 1. implement - /ˈɪmplɪment/ - cài đặt, hiện thực
 2. declare - /dɪˈkleə(r)/ - khai báo
-3. define - /dɪˈfaɪn/ - định nghĩa"></textarea>
+3. define - /dɪˈfaɪn/ - định nghĩa"
+              ></textarea>
               <div class="help">
-                App tự lọc số thứ tự, tự tách English / IPA / nghĩa và tự thêm loại từ.
-                Từ trùng trong chính bộ đề sẽ được bỏ qua.
+                App tự lọc số thứ tự, tự tách English / IPA / nghĩa và tự thêm
+                loại từ. Từ trùng trong chính bộ đề sẽ được bỏ qua.
               </div>
               <div id="bulkAddWordsMsg"></div>
-              <div class="actions" style="justify-content:flex-start;margin-top:12px">
-                <button class="btn ghost" onclick="previewBulkAddWords()">Xem trước</button>
-                <button class="btn pri" onclick="confirmBulkAddWords()">Thêm vào bộ đề</button>
-                <button class="btn ghost" onclick="toggleBulkAddWords(false)">Đóng</button>
+              <div
+                class="actions"
+                style="justify-content: flex-start; margin-top: 12px"
+              >
+                <button class="btn ghost" onclick="previewBulkAddWords()">
+                  Xem trước
+                </button>
+                <button class="btn pri" onclick="confirmBulkAddWords()">
+                  Thêm vào bộ đề
+                </button>
+                <button class="btn ghost" onclick="toggleBulkAddWords(false)">
+                  Đóng
+                </button>
               </div>
             </div>
             <div id="manageWords" class="wordgrid"></div>
